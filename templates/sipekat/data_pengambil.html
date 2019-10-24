@@ -1,0 +1,267 @@
+{% extends "sipekat/index.html" %}
+
+
+	{% block title %}
+		<title> SI - PEKAT | Data Pengambil Sertifikat </title>
+	{% endblock title %}
+
+{% block content %}
+	<div class="app-main__inner">
+		<div class="app-page-title">
+			<div class="page-title-wrapper">
+				<div class="page-title-heading">
+					<div class="page-title-icon">
+						<i class="pe-7s-download icon-gradient bg-premium-dark">
+						</i>
+					</div>
+					<div>Data Pengambil Sertifikat Kegiatan Rutin
+						<div class="page-title-subheading">
+							Semua informasi mengenai pengambil sertifikat kegiatan rutin yang sudah selesai proses.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6 col-xl-4">
+				<div class="card mb-3 widget-content bg-midnight-bloom">
+					<div class="widget-content-wrapper text-white">
+						<div class="widget-content-left">
+							<div class="widget-heading">Total Pengambil</div>
+							<div class="widget-subheading">Jumlah keseluruhan pengambil sertifikat.</div>
+						</div>
+						<div class="widget-content-right">
+							<div class="widget-numbers text-white">
+								<span>{{ p_sendiri }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xl-4">
+				<div class="card mb-3 widget-content bg-grow-early">
+					<div class="widget-content-wrapper text-white">
+						<div class="widget-content-left">
+							<div class="widget-heading">Ambil Sendiri</div>
+							<div class="widget-subheading">Pengambilan sertifikat yang diambil atas nama sendiri.</div>
+						</div>
+						<div class="widget-content-right">
+							<div class="widget-numbers text-white">
+								<span>{{ p_sendiri }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xl-4">
+				<div class="card mb-3 widget-content bg-premium-dark">
+					<div class="widget-content-wrapper text-white">
+						<div class="widget-content-left">
+							<div class="widget-heading">Ambil Melalui Kuasa</div>
+							<div class="widget-subheading">Pengambilan sertifikat yang diambil memakai kuasa.</div>
+						</div>
+						<div class="widget-content-right">
+							<div class="widget-numbers text-white">
+								<span>{{ p_kuasa }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+					{% block message %}
+						{% if messages %}
+							{% for message in messages %}
+						{% if message.tags == 'success' %}
+							<div class="alert alert-success" role="alert" id="success-alert">
+									<p class="h6">{{ message }}</p>
+							</div>
+						{% elif message.tags == 'warning' %}
+							<div class="alert alert-warning" role="alert" id="warning-alert">
+									<p class="h6">{{ message }}</p>
+							</div>
+						{% else %}
+							<div class="alert alert-danger" role="alert" id="danger-alert">
+									<p class="h6">{{ message }}</p>
+							</div>
+						{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endblock message %}
+
+
+
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="main-card mb-3 card">
+					<div class="card-header"><i class="fa fa-database"></i> &nbsp;&nbsp; Database Pengambil Sertifikat Kegiatan Rutin</div>
+
+						<div class="card-body">
+
+							<div role="group" class="btn-group btn-group-toggle">
+								<button class="btn btn-primary detail-pengambil" type="button" data-toggle="modal">
+									<span class="btn-icon-wrapper pr-1">
+										<i class="fa fa-address-card"></i>
+									</span><b>Detail Data Pengambil</b>
+								</button>
+							</div>
+
+							<br>
+							<br>
+							
+							<div class="table-responsive">
+								<table style="width: 100%;" id="datatable" class="table table-hover table-striped table-bordered dataTable dtr-inline">
+									<thead>
+										<tr>
+											<th class="text-center">ID</th>
+											<th class="text-center">Nama Pengambil</th>
+											<th class="text-center">NIK</th>
+											<th class="text-center">Alamat</th>
+											<th class="text-center">No. Tlp</th>
+											<th class="text-center">Waktu Pengambilan</th>
+											{% comment %} <th class="text-center">Gambar</th> {% endcomment %}
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+	</div>
+{% endblock content %}
+
+
+{% block modal %}
+<!-- MODAL DETAIL -->
+<div class="modal fade" id="ModalDetail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title"> <i class="fas fa-address-card fa-fw"></i> Detail Data Pengambil Sertifikat </h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="modals-detail"></div>
+			</div>
+			<div class="modal-footer">
+				<div style="float: right;">
+					<button type="button" class="btn btn-warning" data-dismiss="modal"><span class="btn-icon-wrapper pr-2"><i class="fas fa-times"></i></span><b>Batal</b></button>
+					<a href="{% url 'cetak_pengambil' id=411 %}" id="cetak" type="button" class="btn btn-primary" target="_blank"><span class="btn-icon-wrapper pr-2"><i class="fas fa-save"></i></span><b>Cetak</b></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- MODAL ALERT -->
+<div id="alertModal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" style="background-color: #d9534f; color:#fff;">
+				<h5 class="modal-title">Peringatan!</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<p>Pilih dulu data yang mau dilihat!</p>
+				<p class="text-secondary"><small>Klik baris data pada tabel untuk memilih data yang diinginkan.</small></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal"><span class="btn-icon-wrapper pr-2"><i class="fas fa-check"></i></span>Ok!</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock modal %}
+
+
+{% block script %}
+<script type="text/javascript">
+
+
+		$("#success-alert, #warning-alert, #danger-alert").fadeTo(2000, 500).slideUp(500, function() {
+	      	$("#success-alert, #warning-alert, #danger-alert").slideUp(1500);
+	    });
+
+		
+	$(document).ready(function(){
+
+		var pengambil_id, nama, nik, alamat, tlp, tanggal;
+
+		// ===================
+		// 	START DTATABLES
+		// ===================
+		var dTable = $('#datatable').DataTable({
+			"select": true,
+			"order": [[ 5, 'desc' ],],
+			"lengthMenu": [[6, 8, 10, -1], [6, 8, 10, "All"]],
+			"columnDefs": [
+								{
+									"targets": [0],
+									"visible": false,
+									"searchable": false
+								}
+							],
+			"ajax": "{% url 'ajax_table_list_pengambil' %}",
+			"columns": [
+						{ "data": "id" },
+						{ "data": "nama", "width": "15%" },
+						{ "data": "nik", "width": "10%", className: 'text-center' },
+						{ "data": "alamat", "width": "20%" },
+						{ "data": "tlp", "width": "10%", className: 'text-center', orderable: false },
+						{ "data": "tgl", "width": "12%", className: 'text-center' },
+						{% comment %} { "data": "gambar", "width": "5%", className: 'text-center', orderable: false }, {% endcomment %}
+			]
+		});
+
+		$('#datatable tbody').on('click', 'tr', function() {
+			if ($(this).hasClass('selected')) {
+				$(this).removeClass('selected');
+				console.log('NONE');
+				pengambil_id = undefined;
+			} else {
+				dTable.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+				dt = dTable.row( this ).data();
+				pengambil_id 	= dt.id;
+				nama 			= dt.nama;
+				nik 			= dt.nik;
+				alamat 			= dt.alamat;
+				tlp 			= dt.tlp;
+				tanggal 		= dt.tgl;
+				console.log(pengambil_id, nama)
+			}
+		});
+		// ===================
+		// 	END DTATABLES
+		// ===================
+
+
+		// ===================
+		// 	BUTTON DETAIL
+		// ===================
+		$('.detail-pengambil').click('click', function() {
+			if (pengambil_id == undefined) {
+				$("#alertModal").modal('show');
+			} else {
+				window.open("{% url 'cetak_pengambil' id=411 %}".replace(/411/, pengambil_id.toString()), "_self");
+			}
+		});
+
+		$('#cetak').on('click', function() {
+			var btn = $(this);
+			btn.attr('href', "{% url 'cetak_pengambil' id=411 %}".replace(/411/, pengambil_id.toString()));
+			$('#ModalDetail').modal('hide');
+		});
+	});
+	
+</script>
+{% endblock script %}

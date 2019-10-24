@@ -1,0 +1,183 @@
+{% extends "sipekat/index.html" %}
+
+
+	{% block title %}
+		<title> SI - PEKAT | Ambil Sertifikat </title>
+	{% endblock title %}
+
+	{% block content %}
+				<div class="app-main__inner">
+					<div class="app-page-title">
+						<div class="page-title-wrapper">
+							<div class="page-title-heading">
+								<div class="page-title-icon">
+									<i class="pe-7s-notebook icon-gradient bg-premium-dark">
+									</i>
+								</div>
+								<div>Form Pengambilan Sertifikat Kegiatan Rutin
+									<div class="page-title-subheading">
+										Cocokan dan isi dengan benar data-data terkait pengambilan sertifikat, jangan sampai keliru.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="main-card mb-3 card">
+								<div class="card-header">
+                                    <i class="fa fa-atlas"></i> &nbsp;&nbsp; Form Pengambilan Sertifikat
+                                </div>
+								<div class="card-body">
+
+                                <table class="mb-0 table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Nama Pemilik</th>
+                                            <th>Nomor Hak</th>
+                                            <th>Nomor Berkas</th>
+                                            <th>Kecamatan</th>
+                                            <th>Desa/Kelurahan</th>
+                                            <th>Jenis Kegiatan</th>
+                                            <th>Keadaan Tanah</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for val in data %}
+                                        <tr>
+                                            <td>{{ val.no }}.</td>
+                                            <td>{{ val.pemilik }}</td>
+                                            <td>{{ val.nomor }}</td>
+                                            <td>{{ val.berkas }}</td>
+                                            <td>{{ val.kecamatan }}</td>
+                                            <td>{{ val.kelurahan }}</td>
+                                            <td>{{ val.jenis }}</td>
+                                            <td>{{ val.keterangan }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                &nbsp;
+                                &nbsp;
+                                <hr>
+                                &nbsp;
+                                &nbsp;
+
+                                <form method="post" enctype="multipart/form-data" id="form" class="form-ambil-sertifikat">
+                                    {% csrf_token %}
+                                    <div class="form-row">
+                                        <div class="position-relative form-group col-md-3 mb-3"><label for="exampleSelect">Jenis Pengambilan</label>
+                                            <select name="jenis" class="form-control" id="jenis">
+                                                <option value=1>Atas Nama Sendiri</option>
+                                                <option value=2>Melalui Kuasa</option>
+                                            </select>
+                                        </div>
+                                        <div class="position-relative form-group col-md-3 mb-3"><label>Nama</label>
+                                            <input name="nama" class="form-control" id="nama" type="text" placeholder="Nama Sesuai KTP" oninvalid="this.setCustomValidity('Harus isi, tidak boleh kosong.')" required="" oninput="setCustomValidity('')">
+                                        </div>
+                                        <div class="position-relative form-group col-md-3 mb-3"><label>NIK</label>
+                                            <input name="nik" class="form-control" id="nik" type="text" placeholder="Nomor Induk Kependudukan" oninvalid="this.setCustomValidity('Harus isi, tidak boleh kosong.')" required="" oninput="setCustomValidity('')">
+                                        </div>
+                                        <div class="position-relative form-group col-md-3 mb-3"><label>Nomor Tlp/HP</label>
+                                            <input name="tlp" class="form-control" id="tlp" type="text" placeholder="Nomor yang bisa dihubungi" oninvalid="this.setCustomValidity('Harus isi, tidak boleh kosong.')" required="" oninput="setCustomValidity('')">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="position-relative form-group col-md-4 mb-3"><label for="examplePassword">Alamat</label>
+                                            <textarea name="alamat" class="form-control" id="alamat" type="text" placeholder="Alamat Sesuai KTP"></textarea>
+                                        </div>
+                                        <div class="position-relative form-group col-md-4 mb-3"><label for="examplePassword">Keterangan</label>
+                                            <textarea name="keterangan" class="form-control" id="keterangan" type="text" placeholder="Keterangan Pengambilan"></textarea>
+                                        </div>
+                                        <div class="position-relative form-group col-md-2 mb-3"><label for="exampleFile">Upload Foto</label>
+                                            <input name="gambar" class="form-control-file" id="gambar" type="file" onchange="return fileValidation()"/>
+                                        </div>
+                                        <div class="position-relative form-group col-md-2 mb-3"><label for="exampleFile"></label></br>
+                                            <div id="previewGambar"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-block text-right card-footer">
+                                        <a href="{% url 'list_ambil_sertifikat' %}" type="button" class="btn btn-warning">
+                                            <span class="btn-icon-wrapper pr-2"><i class="fas fa-times"></i></span><b>Batal</b></a>
+                                        <button type="submit" class="btn btn-primary" id="ambil">
+                                            <span class="btn-icon-wrapper pr-2"><i class="fas fa-save"></i></span><b>Ambil</b></button>
+                                    </div>
+
+                                </form>
+
+
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+	{% endblock content %}
+
+
+			{% block footer %}
+				<div class="app-wrapper-footer">
+					<div class="app-footer">
+						<div class="app-footer__inner">
+							<div class="app-footer-right">
+								<ul class="nav">
+									<li class="nav-item">
+										<a href="javascript:void(0);" class="nav-link">
+											Footer Link 3
+										</a>
+									</li>
+									<li class="nav-item">
+										<a href="javascript:void(0);" class="nav-link">
+											<div class="badge badge-success mr-1 ml-0">
+												<small>NEW</small>
+											</div>
+											Footer Link 4
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endblock footer %}
+
+		</div>
+
+		</div>
+	</div>
+
+
+
+{% block script %}
+
+<script type="text/javascript">
+    function fileValidation(){
+        var fileInput = document.getElementById('gambar');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            alert('File yang di upload harus berformat .jpeg/.jpg/.png/.gif !');
+            fileInput.value = '';
+            return false;
+        } else {
+            // Image Preview
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewGambar').innerHTML = '<img src="'+e.target.result+'" height="87" width="245" />';
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+    }
+</script>
+    
+{% endblock script %}

@@ -1,0 +1,402 @@
+{% extends "sipekat/index.html" %}
+
+
+	{% block title %}
+		<title> SI - PEKAT | Data Ambil Sertifikat </title>
+	{% endblock title %}
+
+	{% block content %}
+				<div class="app-main__inner">
+					<div class="app-page-title">
+						<div class="page-title-wrapper">
+							<div class="page-title-heading">
+								<div class="page-title-icon">
+									<i class="pe-7s-notebook icon-gradient bg-premium-dark">
+									</i>
+								</div>
+								<div>Data sertifikat kegiatan rutin yang siap di ambil
+									<div class="page-title-subheading">
+										Cocokan dan isi dengan benar data-data terkait pengambilan sertifikat, jangan sampai keliru.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6 col-xl-4">
+							<div class="card mb-3 widget-content bg-midnight-bloom">
+								<div class="widget-content-wrapper text-white">
+									<div class="widget-content-left">
+										<div class="widget-heading">TOTAL SERTIFIKAT</div>
+										<div class="widget-subheading">Jumlah keseluruhan sertifikat</div>
+									</div>
+									<div class="widget-content-right">
+										<div class="widget-numbers text-white"><span>{{ s_total }}</span></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-xl-4">
+							<div class="card mb-3 widget-content bg-grow-early">
+								<div class="widget-content-wrapper text-white">
+									<div class="widget-content-left">
+										<div class="widget-heading">SERTIFIKAT SUDAH DI AMBIL</div>
+										<div class="widget-subheading">Jumlah sertifikat yang sudah di ambil</div>
+									</div>
+									<div class="widget-content-right">
+										<div class="widget-numbers text-white"><span>{{ s_sudah_ambil }}</span></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-xl-4">
+							<div class="card mb-3 widget-content bg-premium-dark">
+								<div class="widget-content-wrapper text-white">
+									<div class="widget-content-left">
+										<div class="widget-heading">SERTIFIKAT BELUM DI AMBIL</div>
+										<div class="widget-subheading">Jumlah sertifikat yang belum di ambil</div>
+									</div>
+									<div class="widget-content-right">
+										<div class="widget-numbers text-white"><span>{{ s_belum_ambil }}</span></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+
+					{% block message %}
+						{% if messages %}
+							{% for message in messages %}
+						{% if message.tags == 'warning' %}
+							<div class="alert alert-warning" role="alert" id="warning-alert">
+									<p class="h6">{{ message }}</p>
+							</div>
+						{% else %}
+							<div class="alert alert-danger" role="alert" id="danger-alert">
+									<p class="h6">{{ message }}</p>
+							</div>
+						{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endblock message %}
+
+
+
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="main-card mb-3 card">
+								<div class="card-header"><i class="fa fa-atlas"></i> &nbsp;&nbsp; Pengambilan Sertifikat Kegiatan Rutin </div>
+
+								<div class="card-body">
+									<div role="group" class="btn-group btn-group-toggle">
+										<button class="btn btn-primary ambil-sertifikat" type="button" data-toggle="modal">
+											<span class="btn-icon-wrapper pr-1">
+												<i class="fas fa-atlas"></i>
+											</span><b>Ambil Sertifikat</b>
+										</button>
+									</div>
+
+									<br>
+									<br>
+
+									<div class="table-responsive">
+										<table style="width: 100%;" id="datatable" class="table table-hover table-striped table-bordered dataTable dtr-inline">
+											<thead>
+												<tr>
+													<th></th>
+													<th class="text-center">Nama Pemilik</th>
+													<th class="text-center">Jenis</th>
+													<th class="text-center">Nomor HAK</th>
+													<th class="text-center">Nomor Berkas</th>
+													<th class="text-center">Letak Desa</th>
+													<th class="text-center">Keterangan</th>
+													<th class="text-center">Status</th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+	{% endblock content %}
+
+
+			{% block footer %}
+				<div class="app-wrapper-footer">
+					<div class="app-footer">
+						<div class="app-footer__inner">
+							<div class="app-footer-right">
+								<ul class="nav">
+									<li class="nav-item">
+										<a href="javascript:void(0);" class="nav-link">
+											Footer Link 3
+										</a>
+									</li>
+									<li class="nav-item">
+										<a href="javascript:void(0);" class="nav-link">
+											<div class="badge badge-success mr-1 ml-0">
+												<small>NEW</small>
+											</div>
+											Footer Link 4
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endblock footer %}
+
+		</div>
+
+		</div>
+	</div>
+
+
+{% block modal %}
+<!-- MODAL AMBIL SERTIFIKAT -->
+<div class="modal fade" id="modal-ambil-sertifikat" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			{% comment %} <form method="post" enctype="multipart/form-data" action="{% url 'ambil_sertifikat' %}" class="form-ambil-sertifikat">{% csrf_token %} {% endcomment %}
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle"> <i class="fas fa-atlas fa-fw"></i> Pengambilan Sertifikat </h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="modals-ambil-sertifikat"></div>
+				</div>
+				<div class="modal-footer">
+					<div style="float: right;">
+						<button type="button" class="btn btn-warning" data-dismiss="modal"><span class="btn-icon-wrapper pr-2"><i class="fas fa-times"></i></span><b>Batal</b></button>
+						<button type="submit" class="btn btn-primary" id="ambil"><span class="btn-icon-wrapper pr-2"><i class="fas fa-save"></i></span><b>Ambil</b></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- MODAL ALERT -->
+<div id="alertModalAmbilSertifikat" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" style="background-color: #f7b924; color:#fff;">
+				<h5 class="modal-title">Peringatan!</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<p>Pilih dulu data yang mau diproses!</p>
+				<p class="text-secondary"><small>Klik baris data pada tabel untuk memilih data yang akan diproses.</small></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal"><span class="btn-icon-wrapper pr-2"><i class="fas fa-check"></i></span>Ok!</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="alertModalSudahAmbilSertifikat" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" style="background-color: #d9534f; color:#fff;">
+				<h5 class="modal-title">Peringatan!</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<p class="text-title"></p>
+				<p class="text-secondary"><small>Sertifikat tersebut sudah diambil dan data tidak bisa diedit kembali.</small></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal"><span class="btn-icon-wrapper pr-2"><i class="fas fa-check"></i></span>Ok!</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock modal %}
+
+{% block script %}
+<script type="text/javascript">
+
+
+
+		$("#success-alert, #warning-alert, #danger-alert").fadeTo(2000, 500).slideUp(500, function() {
+	      	$("#success-alert, #warning-alert, #danger-alert").slideUp(1500);
+	    });
+
+
+
+	$(document).ready(function() {
+		var sertifikat_id, sertifikat_nama, sertifikat_nomor, sertifikat_kelurahan, sertifikat_post;
+		rows_selected = [];
+		post_selected = [];
+
+		// ===================
+		// 	START DTATABLES
+		// ===================
+		var dTable = $('#datatable').DataTable({
+			'select': { 'style': 'multi' },
+			"lengthMenu": [[6, 8, 10, -1], [6, 8, 10, "All"]],
+			'columnDefs': [{
+								'targets': 0,
+								'checkboxes': { 'selectRow': true }
+							}],
+			'order': [[1, 'asc']],
+			"ajax": "{% url 'ajax_table_list_ambil' %}",
+			"columns": [
+						{ "data": "id" },
+						{ "data": "pemilik", "width": "20%" },
+						{ "data": "jenis", "width": "15%",
+							"render": function (data, type, full) {
+								if (data == "1") {
+									 return 'Hak Tanggungan';
+								} else if (data == "2") {
+									 return 'Jual Beli';
+								} else if (data == "3") {
+									 return 'Pemecahan';
+								} else if (data == "4") {
+									 return 'Pendaftaran SK Hak 1X';
+								} else if (data == "5") {
+									 return 'Pengecekan';
+								} else if (data == "6") {
+									 return 'Pewarisan';
+								} else if (data == "7") {
+									 return 'Roya';
+								} else if (data == "8") {
+									 return 'Wakaf';
+								} else {
+									 return 'Lain-lain';
+								}
+							}
+						},
+						{ "data": "nomor", "width": "8%", className: 'text-center' },
+						{ "data": "berkas", "width": "8%", className: 'text-center' },
+						{ "data": "kelurahan", "width": "10%" },
+						{ "data": "keterangan", "width": "25%" },
+						{ "data": "post", "width": "5%", className: 'text-center',
+							"render": function (data, type, full) {
+								if (data == "0") {
+									return '<i class="fas fa-minus" style="color:#000000;" title="Sertifikat Belum Diambil"></i>';
+								} else {
+									return '<i class="fas fa-check" style="color:#28a745;" title="Sertifikat Sudah Diambil"></i>';
+								}
+							}
+						},
+					]
+		});
+
+
+
+
+
+		// Handle datatable on select row 
+		$('#datatable tbody').on('click', 'tr', function(){
+			dt = dTable.row( this ).data();
+			sertifikat_id = dt.id;
+			sertifikat_nama = dt.pemilik;
+			sertifikat_nomor = dt.nomor;
+			sertifikat_kelurahan = dt.kelurahan;
+			sertifikat_post = dt.post;
+			post_selected.push(dt.post);
+			console.log(sertifikat_id, sertifikat_nama, sertifikat_nomor, sertifikat_kelurahan, sertifikat_post)	
+		});
+		// ===================
+		//  END DTATABLES
+		// ===================
+
+
+		// =========================
+		// BUTTON AMBIL SERTIFIKAT
+		// =========================
+		{% comment %} var loadForm = function() {
+			$.ajax({
+				url: "{% url 'ambil_sertifikat' %}",
+				type: 'get',
+				dataType: 'json',
+				beforeSend: function (data) {
+					$("#modal-ambil-sertifikat #modals-ambil-sertifikat").html("");
+					$("#modal-ambil-sertifikat").modal("show");
+				},
+				success: function (data) {
+					console.log(data)
+					$("#modals-ambil-sertifikat").html(
+						'<div class="form-row">\
+						<div class="col-md-6 mb-3">'.concat(data.form[1][0].concat('</div>\
+						<div class="col-md-6 mb-3">'.concat(data.form[2][0].concat('</div>\
+						</div>\
+						<div class="form-row">\
+						<div class="col-md-6 mb-3">'.concat(data.form[3][0].concat('</div>\
+						<div class="col-md-6 mb-3">'.concat(data.form[5][0].concat('</div>\
+						</div>\
+						<div class="form-row">\
+						<div class="col-md-6 mb-3">'.concat(data.form[4][0].concat('</div>\
+						<div class="col-md-6 mb-3">'.concat(data.form[7][0].concat('</div>\
+						</div>'))))))))))))
+					);
+				}
+			});
+		}; {% endcomment %}
+
+		var saveForm = function() {
+			var form = $(this);
+			$.ajax({
+				url: form.attr("action"),
+				data: form.serialize() + '&sertifikat_id=' + rows_selected,
+				type: form.attr("method"),
+				dataType: 'json',
+				success: function (data, status) {
+				if (data['msg'] == 'Success') {
+					$("#modal-ambil-sertifikat").modal("hide");
+					if (confirm('Cetak data Pengambilan.?')){
+						alert(data['msg']);
+						console.log(data['saveid']);
+						window.open("{% url 'cetak_pengambil' id=411 %}".replace(/411/, data['saveid'].toString()), "_blank")
+					} else {
+						alert(data['msg']);
+						console.log(data['saveid']);
+					}
+					location.reload();
+					sertifikat_id = undefined;
+					rows_selected = [];
+				} else {
+					$("#modal-ambil-sertifikat").modal("hide");
+					alert(data['msg']);
+					sertifikat_id = undefined;
+					location.reload();
+					}
+				},
+			});
+			return false;
+		};
+
+		$('.ambil-sertifikat').click('click', function() {
+			var row_selected = dTable.column(0).checkboxes.selected();
+			rows_selected = row_selected.join(",");
+			if (rows_selected.length < 1) {
+				$("#alertModalAmbilSertifikat").modal('show');
+			} else if (rows_selected.length == 1 && sertifikat_post == 0) {
+				window.open("{% url 'ambil_sertifikat' id=411 %}".replace(/411/, rows_selected.toString()), "_self")
+			} else if (post_selected.length >= 1) {
+				if (post_selected.includes(1)) {
+					$("#alertModalSudahAmbilSertifikat").modal('show');
+					$('#alertModalSudahAmbilSertifikat .text-title').html('Sertifikat atas nama <b>'+sertifikat_nama+'</b> sudah diambil!');
+				} else {
+					window.open("{% url 'ambil_sertifikat' id=411 %}".replace(/411/, rows_selected.toString()), "_self")
+				}
+			} else {
+				window.open("{% url 'ambil_sertifikat' id=411 %}".replace(/411/, rows_selected.toString()), "_self")
+			}
+		});
+
+	});
+</script>
+{% endblock script %}

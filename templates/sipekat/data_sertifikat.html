@@ -1,0 +1,465 @@
+{% extends "sipekat/index.html" %}
+
+
+	{% block title %}
+		<title> SI - PEKAT | Data Sertifikat </title>
+	{% endblock title %}
+
+{% block content %}
+	<div class="app-main__inner">
+		<div class="app-page-title">
+			<div class="page-title-wrapper">
+				<div class="page-title-heading">
+					<div class="page-title-icon">
+						<i class="pe-7s-ribbon icon-gradient bg-premium-dark">
+						</i>
+					</div>
+					<div>Input Data Sertifikat Kegiatan Rutin
+						<div class="page-title-subheading">
+							Masukkan semua data sertifikat kegiatan rutin yang sudah selesai, sesuai form yang ada.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6 col-xl-2">
+				<div class="card mb-3 widget-content bg-midnight-bloom">
+					<div class="widget-content-wrapper text-white">
+						<div class="widget-content-left">
+							<div class="widget-heading">Jumlah Sertifikat</div>
+							<div class="widget-subheading">Total sertifikat</div>
+						</div>
+						<div class="widget-content-right">
+							<div class="widget-numbers text-white">
+								<span>{{ s_total }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xl-2">
+				<div class="card mb-3 widget-content bg-mixed-hopes">
+					<div class="widget-content-wrapper text-white">
+						<div class="widget-content-left">
+							<div class="widget-heading">Hak Tanggungan</div>
+							<div class="widget-subheading">Kegiatan Hak Tanggungan</div>
+						</div>
+						<div class="widget-content-right">
+							<div class="widget-numbers text-white">
+								<span>{{ s_hak_tanggungan }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xl-2">
+				<div class="card mb-3 widget-content bg-sunny-morning">
+					<div class="widget-content-wrapper text-white">
+						<div class="widget-content-left">
+							<div class="widget-heading">Jual Beli</div>
+							<div class="widget-subheading">Kegiatan Jual Beli</div>
+						</div>
+						<div class="widget-content-right">
+							<div class="widget-numbers text-white">
+								<span>{{ s_jual_beli }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xl-2">
+				<div class="card mb-3 widget-content bg-amy-crisp">
+					<div class="widget-content-wrapper text-white">
+						<div class="widget-content-left">
+							<div class="widget-heading">Pemecahan</div>
+							<div class="widget-subheading">Kegiatan Pemecahan</div>
+						</div>
+						<div class="widget-content-right">
+							<div class="widget-numbers text-white">
+								<span>{{ s_pemecahan }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xl-2">
+				<div class="card mb-3 widget-content bg-arielle-smile">
+					<div class="widget-content-wrapper text-white">
+						<div class="widget-content-left">
+							<div class="widget-heading">Pengecekan</div>
+							<div class="widget-subheading">Kegiatan Pengecekan</div>
+						</div>
+						<div class="widget-content-right">
+							<div class="widget-numbers text-white">
+								<span>{{ s_pengecekan }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xl-2">
+				<div class="card mb-3 widget-content bg-plum-plate">
+					<div class="widget-content-wrapper text-white">
+						<div class="widget-content-left">
+							<div class="widget-heading">Hapusnya Hak</div>
+							<div class="widget-subheading">Kegiatan Roya</div>
+						</div>
+						<div class="widget-content-right">
+							<div class="widget-numbers text-white">
+								<span>{{ s_roya }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="main-card mb-3 card">
+						<div class="card-header"><i class="fa fa-database"></i> &nbsp;&nbsp; Database Sertifikat Kegiatan Rutin</div>
+
+						<div class="card-body">
+							<div role="group" class="btn-group btn-group-toggle">
+								<button class="btn btn-primary input-sertifikat" type="button" data-toggle="modal" data-url="{% url 'input_sertifikat' %}">
+									<span class="btn-icon-wrapper pr-1">
+										<i class="fa fa-file"></i>
+									</span><b>Tambah</b>
+								</button>
+								<button class="btn btn-warning edit-sertifikat" type="button" style="color: white" data-toggle="modal">
+									<span class="btn-icon-wrapper pr-1">
+										<i class="fa fa-eraser"></i>
+									</span><b>Edit</b>
+								</button>
+								<button class="btn btn-danger delete-sertifikat" type="button" data-url="{% url 'hapus_sertifikat' %}">
+									<span class="btn-icon-wrapper pr-1">
+										<i class="fa fa-trash-alt"></i>
+									</span><b>Hapus</b>
+								</button>
+							</div>
+
+							<br>
+							<br>
+
+							<div class="table-responsive">
+								<table style="width: 100%;" id="datatable" class="table table-hover table-striped table-bordered dataTable dtr-inline">
+									<thead>
+										<tr>
+											<th class="text-center">ID</th>
+											<th class="text-center">Nama Pemilik</th>
+											<th class="text-center">Jenis Kegiatan</th>
+											<th class="text-center">Nomor HAK</th>
+											<th class="text-center">Nomor Berkas</th>
+											<th class="text-center">Letak Desa</th>
+											<th class="text-center">Keterangan</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+	</div>
+{% endblock content %}
+
+
+{% block modal %}
+<!-- MODAL INPUT -->
+<div class="modal fade" id="modal-input" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form method="post" action="{% url 'input_sertifikat' %}" class="form-input">{% csrf_token %}
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle"> <i class="fas fa-file-alt fa-fw"></i> Input Data Sertifikat </h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-modal">
+							<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="modals-input"></div>
+				</div>
+				<div class="modal-footer">
+					<div style="float: right;">
+						<button type="button" class="btn btn-warning" data-dismiss="modal"><span class="btn-icon-wrapper pr-2"><i class="fas fa-times"></i></span><b>Batal</b></button>
+						<button type="submit" class="btn btn-primary"><span class="btn-icon-wrapper pr-2"><i class="fas fa-save"></i></span><b>Simpan</b></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- MODAL EDIT -->
+<div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form method="post" class="form-edit">{% csrf_token %}
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle"> <i class="fas fa-pencil-alt fa-fw"></i> Edit Data Sertifikat </h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-modal">
+							<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="modals-edit"></div>
+				</div>
+				<div class="modal-footer">
+					<div style="float: right;">
+						<button type="button" class="btn btn-warning" data-dismiss="modal"><span class="btn-icon-wrapper pr-2"><i class="fas fa-times"></i></span><b>Batal</b></button>
+						<button type="submit" class="btn btn-primary"><span class="btn-icon-wrapper pr-2"><i class="fas fa-save"></i></span><b>Simpan</b></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- MODAL ALERT -->
+<div id="alertModalEdit" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" style="background-color: #f0ad4e; color:#fff;">
+				<h5 class="modal-title">Peringatan!</h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<p>Pilih dulu data yang mau dirubah!</p>
+				<p class="text-secondary"><small>Klik baris data pada tabel untuk memilih data yang ingin dirubah.</small></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal"><span class="btn-icon-wrapper pr-2"><i class="fas fa-check"></i></span>Ok!</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="alertModalDelete" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" style="background-color: #d92550; color:#fff;">
+				<h5 class="modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body"></div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal"><span class="btn-icon-wrapper pr-2"><i class="fas fa-check"></i></span>Ok!</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock modal %}
+
+
+{% block script %}
+<script type="text/javascript">
+
+	$(document).ready(function(){
+
+		var sertifikat_id, sertifikat_nama, sertifikat_post;
+
+		// ===================
+		//  START DTATABLES
+		// ===================
+		var dTable = $('#datatable').DataTable({
+			"select": true,
+			"lengthMenu": [[6, 8, 10, -1], [6, 8, 10, "All"]],
+			"columnDefs": [
+								{
+									"targets": [0, 7],
+									"visible": false,
+									"searchable": false
+								}
+							],
+			"ajax": "{% url 'ajax_table_list_sipekat' %}",
+			"columns": [
+						{ "data": "id" },
+						{ "data": "pemilik", "width": "20%" },
+						{ "data": "jenis", "width": "15%",
+							"render": function (data, type, full) {
+								if (data == "1") {
+									 return 'Hak Tanggungan';
+								} else if (data == "2") {
+									 return 'Jual Beli';
+								} else if (data == "3") {
+									 return 'Pemecahan';
+								} else if (data == "4") {
+									 return 'Pendaftaran SK Hak 1X';
+								} else if (data == "5") {
+									 return 'Pengecekan';
+								} else if (data == "6") {
+									 return 'Pewarisan';
+								} else if (data == "7") {
+									 return 'Roya';
+								} else if (data == "8") {
+									 return 'Wakaf';
+								} else {
+									 return 'Lain-lain';
+								}
+							}
+						},
+						{ "data": "nomor", "width": "10%", className: 'text-center' },
+						{ "data": "berkas", "width": "12%", className: 'text-center' },
+						{ "data": "kelurahan", "width": "15%" },
+						{ "data": "keterangan", "width": "30%" },
+						{ "data": "post", "width": "30%" },
+			]
+		});
+
+		$('#datatable tbody').on('click', 'tr', function() {
+			if ($(this).hasClass('selected')) {
+				$(this).removeClass('selected');
+				console.log('NONE');
+				sertifikat_id = undefined;
+			} else {
+				dTable.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+				dt = dTable.row( this ).data();
+				$("#edit-btn, #delete-btn").removeAttr("disabled");
+				sertifikat_id = dt.id;
+				sertifikat_nama = dt.pemilik;
+				sertifikat_post = dt.post;
+				console.log(sertifikat_id);
+			}
+		});
+		// ===================
+		// 		END DTATABLES
+		// ===================
+
+
+
+		function loadForm(event) {
+			purpose = (event.data.purpose)
+			var btn = $(this);
+			$.ajax({
+				url: btn.attr("data-url"),
+				type: 'get',
+				dataType: 'json',
+				beforeSend: function (data) {
+					$("#modal-"+purpose+" #modals-"+purpose).html("");
+					$("#modal-"+purpose).modal("show");
+				},
+				success: function (data) {
+					$("#modals-"+purpose).html(
+						'<div class="form-row">\
+						<div class="col-md-4 mb-3">'.concat(data.form[1][0].concat('</div>\
+						<div class="col-md-4 mb-3">'.concat(data.form[2][0].concat('</div>\
+						<div class="col-md-4 mb-3">'.concat(data.form[3][0].concat('</div>\
+						</div>\
+						<div class="form-row">\
+						<div class="col-md-4 mb-3">'.concat(data.form[4][0].concat('</div>\
+						<div class="col-md-4 mb-3">'.concat(data.form[5][0].concat('</div>\
+						<div class="col-md-4 mb-3">'.concat(data.form[6][0].concat('</div>\
+						</div>\
+						<div class="form-row">\
+						<div class="col-md-12 mb-3">'.concat(data.form[7][0].concat('</div>\
+						</div>'))))))))))))))
+						);
+					kecamatan();
+				}
+			});
+		};
+
+		function saveForm(event) {
+			purpose = (event.data.purpose)
+			var form = $(this);
+			$.ajax({
+				url: form.attr("action"),
+				data: form.serialize(),
+				type: form.attr("method"),
+				dataType: 'json',
+				success: function (data, status) {
+				if (data['msg'] == 'Success') {
+					$("#modal-"+purpose).modal("hide");
+					alert(data['msg']);
+					dTable.ajax.reload();
+					sertifikat_id = undefined;
+				} else {
+					$("#modal-"+purpose).modal("hide");
+					alert(data['msg']);
+					dTable.ajax.reload();
+					sertifikat_id = undefined;
+					}
+				},
+			});
+			return false;
+		};
+
+
+
+
+
+		// BUTTON CREATE
+		$(".input-sertifikat").click({purpose: "input"}, loadForm);
+		$("#modal-input").on("submit", ".form-input", {purpose: "input"}, saveForm);
+
+		// BUTTON EDIT
+		$('.edit-sertifikat').click('click', function() {
+			console.log(sertifikat_id)
+			if (sertifikat_id == undefined) {
+				$("#alertModalEdit").modal('show');
+			}
+		});
+
+		$('.edit-sertifikat').click('click', function() {
+			var btn = $(this);
+			btn.attr('data-url', "{% url 'edit_sertifikat' id=411 %}".replace(/411/, sertifikat_id.toString()));
+			$('.form-edit').attr('action', "{% url 'edit_sertifikat' id=411 %}".replace(/411/, sertifikat_id.toString()));
+		});
+		$(".edit-sertifikat").click({purpose: "edit"}, loadForm);
+		$("#modal-edit").on("submit", ".form-edit", {purpose: "edit"}, saveForm);
+
+		// BUTTON DELETE
+		$('.delete-sertifikat').click('click', function() {
+			console.log(sertifikat_id)
+			var btn = $(this);
+			if (sertifikat_post == 1) {
+				$('#alertModalDelete .modal-title').html('Peringatan!');
+				$('#alertModalDelete .modal-body').html('Sertifikat yang sudah diambil tidak bisa dihapus.');
+				$('#alertModalDelete').modal('show');
+			} else {
+				if (confirm("Yakin mau menghapus data sertifikat "+sertifikat_nama+" ?")) {
+					$.ajax({
+						url: btn.attr("data-url"),
+						data: {'pk': sertifikat_id },
+						dataType: 'json',
+						success: function (data) {
+							console.log(data)
+							$('#alertModalDelete .modal-title').html(data['title']);
+							$('#alertModalDelete .modal-body').html(data['msg']);
+							$('#alertModalDelete').modal('show');
+							dTable.ajax.reload();
+						}
+					});
+				} else {
+				}
+			}
+		});
+
+ 		$(document).on('shown.bs.modal', function () {
+        	$(this).find('#id_pemilik').focus();
+      	});
+
+
+
+		function kecamatan() {
+			$("#id_kecamatan").change(function () {
+				var kec_id = $(this).val();
+				var option = '<option value="" selected="">---------</option>';
+				$.ajax({
+					url: "{% url 'ajax_load_kelurahan' %}",
+					data: { 'kecamatan': kec_id },
+					success: function (data) {
+						for (i = 0; i < data.length; i++) {
+							option += '<option value="'+data[i].pk+'">'+data[i].fields['nama']+'</option>';
+						}
+						$("#id_kelurahan").html(option);
+					}
+				});
+			});
+		};
+		
+
+	});
+</script>
+{% endblock script %}
