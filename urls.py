@@ -22,6 +22,7 @@ urlpatterns = [
     # pengambil
     path('list/pengambil/', views.list_pengambil, name='list_pengambil'),
     path('ajax/table-list-pengambil/', views.table_list_pengambil, name='ajax_table_list_pengambil'),
+    path('ajax/table-list-pengambil1/', views.table_list_pengambil1, name='ajax_table_list_pengambil1'),
     path('cetak/<str:id>/pengambil/', views.cetak_pengambil, name='cetak_pengambil'),
 
     # ambil_sertifikat

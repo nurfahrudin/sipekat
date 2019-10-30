@@ -100,37 +100,69 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="main-card mb-3 card">
-					<div class="card-header"><i class="fa fa-database"></i> &nbsp;&nbsp; Database Pengambil Sertifikat Kegiatan Rutin</div>
 
-						<div class="card-body">
-
-							<div role="group" class="btn-group btn-group-toggle">
-								<button class="btn btn-primary detail-pengambil" type="button" data-toggle="modal">
-									<span class="btn-icon-wrapper pr-1">
-										<i class="fa fa-address-card"></i>
-									</span><b>Detail Data Pengambil</b>
-								</button>
-							</div>
-
-							<br>
-							<br>
-							
-							<div class="table-responsive">
-								<table style="width: 100%;" id="datatable" class="table table-hover table-striped table-bordered dataTable dtr-inline">
-									<thead>
-										<tr>
-											<th class="text-center">ID</th>
-											<th class="text-center">Nama Pengambil</th>
-											<th class="text-center">NIK</th>
-											<th class="text-center">Alamat</th>
-											<th class="text-center">No. Tlp</th>
-											<th class="text-center">Waktu Pengambilan</th>
-											{% comment %} <th class="text-center">Gambar</th> {% endcomment %}
-										</tr>
-									</thead>
-								</table>
+					<div class="card-header"><i class="fa fa-database"></i> &nbsp;&nbsp; Database Pengambil Sertifikat Kegiatan Rutin
+						<div class="btn-actions-pane-right">
+							<div class="nav">
+								<a data-toggle="tab" href="#tab-eg6-0" class="mr-1 ml-1 border-0 btn-transition btn-shadow btn btn-outline-primary">Data Pengambil</a>
+								<a data-toggle="tab" href="#tab-eg6-1" class="mr-1 ml-1 border-0 btn-transition btn-shadow btn btn-outline-primary">Detail Pengambil</a>
 							</div>
 						</div>
+					</div>
+
+					<div class="card-body">
+						<div class="tab-content">
+
+							<div class="tab-pane active" id="tab-eg6-0" role="tabpanel">
+								<div role="group" class="btn-group btn-group-toggle">
+									<button class="btn btn-primary detail-pengambil" type="button" data-toggle="modal">
+										<span class="btn-icon-wrapper pr-1">
+											<i class="fa fa-address-card"></i>
+										</span><b>Lihat Data Pengambil</b>
+									</button>
+								</div>
+
+								<br>
+								<br>
+								
+								<div class="table-responsive">
+									<table style="width: 100%;" id="datatable" class="table table-hover table-striped table-bordered dataTable dtr-inline">
+										<thead>
+											<tr>
+												<th class="text-center">ID</th>
+												<th class="text-center">Nama Pengambil</th>
+												<th class="text-center">NIK</th>
+												<th class="text-center">Alamat</th>
+												<th class="text-center">No. Tlp</th>
+												<th class="text-center">Waktu Pengambilan</th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+							</div>
+
+							<div class="tab-pane" id="tab-eg6-1" role="tabpanel">
+								<div class="table-responsive">
+									<table style="width: 100%;" id="datatable1" class="table table-hover table-striped table-bordered dataTable dtr-inline">
+										<thead>
+											<tr>
+												<th class="text-center">Nama Pengambil</th>
+												<th class="text-center">No. Tlp</th>
+												<th class="text-center">Pemilik Sertifikat</th>
+												<th class="text-center">Kegiatan</th>
+												<th class="text-center">Desa</th>
+												<th class="text-center">Waktu Pengambilan</th>
+												<th class="text-center">Status</th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+
 
 					</div>
 				</div>
@@ -197,7 +229,7 @@
 		var pengambil_id, nama, nik, alamat, tlp, tanggal;
 
 		// ===================
-		// 	START DTATABLES
+		// 	START DTATABLES 1
 		// ===================
 		var dTable = $('#datatable').DataTable({
 			"select": true,
@@ -218,9 +250,43 @@
 						{ "data": "alamat", "width": "20%" },
 						{ "data": "tlp", "width": "10%", className: 'text-center', orderable: false },
 						{ "data": "tgl", "width": "12%", className: 'text-center' },
-						{% comment %} { "data": "gambar", "width": "5%", className: 'text-center', orderable: false }, {% endcomment %}
 			]
 		});
+
+		// ====================
+		// START DATATABLE 2
+		// ====================
+		var dTable = $('#datatable1').DataTable({
+			"select": true,
+			"order": [[ 5, 'desc' ],],
+			"lengthMenu": [[6, 8, 10, -1], [6, 8, 10, "All"]],
+			"columnDefs": [
+								{
+									{% comment %} "targets": [0], {% endcomment %}
+									"visible": false,
+									"searchable": false
+								}
+							],
+			"ajax": "{% url 'ajax_table_list_pengambil1' %}",
+			"columns": [
+						{ "data": "nama", "width": "20%" },
+						{ "data": "tlp", "width": "10%", className: 'text-center', orderable: false },
+						{ "data": "pemilik", "width": "20%" },
+						{ "data": "kegiatan", "width": "25%", className: 'text-center' },
+						{ "data": "kelurahan", "width": "10%" },
+						{ "data": "tgl", "width": "10%", className: 'text-center', orderable: false },
+						{ "data": "post", "width": "5%", className: 'text-center',
+							"render": function (data, type, full) {
+								if (data == "0") {
+									return '<i class="fas fa-minus" style="color:#000000;" title="Sertifikat Belum Diambil"></i>';
+								} else {
+									return '<i class="fas fa-check" style="color:#28a745;" title="Sertifikat Sudah Diambil"></i>';
+								}
+							}
+						},
+			]
+		});
+
 
 		$('#datatable tbody').on('click', 'tr', function() {
 			if ($(this).hasClass('selected')) {

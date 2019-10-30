@@ -280,6 +280,14 @@ def table_list_pengambil(request):
 	obj_list = dictfetchall(cursor)
 	result = json.dumps({"data": list(obj_list)}, cls=DjangoJSONEncoder)
 	return HttpResponse(result, content_type="application/json")
+	
+def table_list_pengambil1(request):
+	query = 'select s.pemilik, p.tlp, p.nama, case when s.jenis == 1 then "Hak Tanggungan" when s.jenis == 2 then "Jual Beli" when s.jenis == 3 then "Pemecahan" when s.jenis == 4 then "Pendaftaran SK Hak 1X" when s.jenis == 5 then "Pengecekan" when s.jenis == 6 then "Pewarisan" when s.jenis == 7 then "Hapusnya Hak/Roya" when s.jenis == 8 then "Wakaf" else "Lain-lain" end kegiatan, k.nama kelurahan,  strftime("%d-%m-%Y %H:%M:%S", p.tgl) tgl, s.post from sipekat_sertifikat s join sipekat_pengambil p on s.pengambil_id == p.id join warkah_kelurahan k on k.id  == s.kelurahan_id'
+	cursor = connection.cursor()
+	cursor.execute(query)
+	obj_list = dictfetchall(cursor)
+	result = json.dumps({"data": list(obj_list)}, cls=DjangoJSONEncoder)
+	return HttpResponse(result, content_type="application/json")
 #-----------------------#
 #	 END PENGAMBIL		#
 #-----------------------#
@@ -309,9 +317,6 @@ def cetak_pengambil(request, id):
 			qr_sertifikat = 'select p.nama p_nama, p.tgl, s.pemilik, s.nomor, s.nib, s.luas, s.tahun, kc.nama kecamatan, kl.nama kelurahan, case when s.jenis == 1 then "Hak Tanggungan" when s.jenis == 2 then "Jual Beli" when s.jenis == 3 then "Pemecahan" when s.jenis == 4 then "Pendaftaran SK Hak 1X" when s.jenis == 5 then "Pengecekan" when s.jenis == 6 then "Pewarisan" when s.jenis == 7 then "Hapusnya Hak/Roya" when s.jenis == 8 then "Wakaf" else "Lain-lain" end kegiatan, case when s.jns_bidang == 1 then "Pekarangan" when s.jns_bidang == 2 then "Pertanian" else "Perkebunan" end jns_bidang from sipekat_pengambil p, sipekat_sertifikat s, warkah_kecamatan kc, warkah_kelurahan kl where s.pengambil_id == p.id and p.id=='+str(idnya[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
 			cursor.execute(qr_sertifikat)
 			obj_sertifikat = dictfetchall(cursor)
-
-			print ('++++++++++++++++++++++++++++++++')
-			print (len(obj_sertifikat))
 
 			for a in range(len(obj_sertifikat)):
 				no = obj_sertifikat[a]
