@@ -199,7 +199,7 @@ def ambil_sertifikat(request, id):
 		dt_sertifikat = []
 		sr_id = id.split(",")
 		for i in range(len(sr_id)):
-			qr_sertifikat = 'select s.pemilik, s.nomor, s.nib, s.luas, s.tahun, kc.nama kecamatan, kl.nama kelurahan, s.keterangan, case when s.jns_bidang == 1 then "Pekarangan" when s.jns_bidang == 2 then "Pertanian" else "Perkebunan" end jns_bidang from sipekat_sertifikat s, warkah_kecamatan kc, warkah_kelurahan kl where s.id=='+str(sr_id[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
+			qr_sertifikat = 'select s.pemilik, s.nomor, s.berkas, kc.nama kecamatan, kl.nama kelurahan, s.keterangan, case when s.jenis == 1 then "Hak Tanggungan" when s.jenis == 2 then "Jual Beli" when s.jenis == 3 then "Pemecahan" when s.jenis == 4 then "Pendaftaran SK Hak 1X" when s.jenis == 5 then "Pengecekan" when s.jenis == 6 then "Pewarisan" when s.jenis == 7 then "Hapusnya Hak/Roya" when s.jenis == 8 then "Wakaf" else "Lain-lain" end jenis from sipekat_sertifikat s, warkah_kecamatan kc, warkah_kelurahan kl where s.id=='+str(sr_id[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
 			cursor.execute(qr_sertifikat)
 			rs_sertifikat = dictfetchall(cursor)
 			no = rs_sertifikat[0]
@@ -314,7 +314,7 @@ def cetak_pengambil(request, id):
 		data_pengambil['gambar']	= '/sipekat/media/'+obj_pengambil[0]['gambar']
 
 		for i in range(len(idnya)):
-			qr_sertifikat = 'select p.nama p_nama, p.tgl, s.pemilik, s.nomor, s.nib, s.luas, s.tahun, kc.nama kecamatan, kl.nama kelurahan, case when s.jenis == 1 then "Hak Tanggungan" when s.jenis == 2 then "Jual Beli" when s.jenis == 3 then "Pemecahan" when s.jenis == 4 then "Pendaftaran SK Hak 1X" when s.jenis == 5 then "Pengecekan" when s.jenis == 6 then "Pewarisan" when s.jenis == 7 then "Hapusnya Hak/Roya" when s.jenis == 8 then "Wakaf" else "Lain-lain" end kegiatan, case when s.jns_bidang == 1 then "Pekarangan" when s.jns_bidang == 2 then "Pertanian" else "Perkebunan" end jns_bidang from sipekat_pengambil p, sipekat_sertifikat s, warkah_kecamatan kc, warkah_kelurahan kl where s.pengambil_id == p.id and p.id=='+str(idnya[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
+			qr_sertifikat = 'select p.nama p_nama, p.tgl, s.pemilik, s.nomor, s.berkas, kc.nama kecamatan, kl.nama kelurahan, case when s.jenis == 1 then "Hak Tanggungan" when s.jenis == 2 then "Jual Beli" when s.jenis == 3 then "Pemecahan" when s.jenis == 4 then "Pendaftaran SK Hak 1X" when s.jenis == 5 then "Pengecekan" when s.jenis == 6 then "Pewarisan" when s.jenis == 7 then "Hapusnya Hak/Roya" when s.jenis == 8 then "Wakaf" else "Lain-lain" end kegiatan from sipekat_pengambil p, sipekat_sertifikat s, warkah_kecamatan kc, warkah_kelurahan kl where s.pengambil_id == p.id and p.id=='+str(idnya[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
 			cursor.execute(qr_sertifikat)
 			obj_sertifikat = dictfetchall(cursor)
 

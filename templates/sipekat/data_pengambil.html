@@ -256,16 +256,16 @@
 		// ====================
 		// START DATATABLE 2
 		// ====================
-		var dTable = $('#datatable1').DataTable({
+		var dTable1 = $('#datatable1').DataTable({
 			"select": true,
 			"order": [[ 5, 'desc' ],],
 			"lengthMenu": [[6, 8, 10, -1], [6, 8, 10, "All"]],
 			"columnDefs": [
-								{
-									{% comment %} "targets": [0], {% endcomment %}
+								{% comment %} {
+									"targets": [0],
 									"visible": false,
 									"searchable": false
-								}
+								} {% endcomment %}
 							],
 			"ajax": "{% url 'ajax_table_list_pengambil1' %}",
 			"columns": [
