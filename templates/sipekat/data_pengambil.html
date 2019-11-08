@@ -135,6 +135,7 @@
 												<th class="text-center">Alamat</th>
 												<th class="text-center">No. Tlp</th>
 												<th class="text-center">Waktu Pengambilan</th>
+												<th class="text-center">short</th>
 											</tr>
 										</thead>
 									</table>
@@ -233,25 +234,33 @@
 		// ===================
 		var dTable = $('#datatable').DataTable({
 			"select": true,
-			"order": [[ 5, 'desc' ],],
+			"order": [[ 5, 'asc' ],],
+			"ordering" : true,
 			"lengthMenu": [[6, 8, 10, -1], [6, 8, 10, "All"]],
 			"columnDefs": [
 								{
-									"targets": [0],
+									"targets": [0,6],
 									"visible": false,
-									"searchable": false
+									"searchable": false,
+								},
+								{ 
+									{% comment %} type: 'time-date-sort', 
+									targets: 5, {% endcomment %}
 								}
 							],
 			"ajax": "{% url 'ajax_table_list_pengambil' %}",
 			"columns": [
+
 						{ "data": "id" },
 						{ "data": "nama", "width": "15%" },
 						{ "data": "nik", "width": "10%", className: 'text-center' },
 						{ "data": "alamat", "width": "20%" },
 						{ "data": "tlp", "width": "10%", className: 'text-center', orderable: false },
-						{ "data": "tgl", "width": "12%", className: 'text-center' },
+						{ "data": "tgl", "width": "12%", className: 'text-center', 'iDataSort': 6 },
+						{ "data": "short" },
 			]
 		});
+		
 
 		// ====================
 		// START DATATABLE 2
@@ -261,11 +270,11 @@
 			"order": [[ 5, 'desc' ],],
 			"lengthMenu": [[6, 8, 10, -1], [6, 8, 10, "All"]],
 			"columnDefs": [
-								{% comment %} {
+								{
 									"targets": [0],
 									"visible": false,
 									"searchable": false
-								} {% endcomment %}
+								}
 							],
 			"ajax": "{% url 'ajax_table_list_pengambil1' %}",
 			"columns": [

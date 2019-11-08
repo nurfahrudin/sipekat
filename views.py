@@ -274,7 +274,7 @@ def list_pengambil(request):
 		return redirect('/login')
 
 def table_list_pengambil(request):
-	query = 'select p.id, p.nama, p.nik, p.alamat, p.tlp, strftime("%d-%m-%Y %H:%M:%S", p.tgl) tgl, p.gambar from sipekat_pengambil p order by p.tgl'
+	query = 'select p.id, p.nama, p.nik, p.alamat, p.tlp, strftime("%d-%m-%Y %H:%M:%S", p.tgl) tgl, strftime("%Y%m%d%H:%M:%S", p.tgl) short, p.gambar from sipekat_pengambil p'
 	cursor = connection.cursor()
 	cursor.execute(query)
 	obj_list = dictfetchall(cursor)
