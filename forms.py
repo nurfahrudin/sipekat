@@ -19,7 +19,7 @@ class SertifikatForm(forms.ModelForm):
 				attrs={'class':'form-control custom-select'}
 				))
 	nomor = forms.CharField(label='Nomor Hak', widget=forms.TextInput(
-				attrs={'class':'form-control', 'placeholder':'Nomor Hak'}
+				attrs={'class':'form-control', 'placeholder':'Nomor Hak', 'maxlength':'5', 'onchange':'FuncHM()'}
 				))
 	berkas = forms.CharField(label='Nomor Berkas', required=True, widget=forms.TextInput(
 				attrs={'class':'form-control', 'placeholder':'Nomor Berkas Pendaftaran'}
