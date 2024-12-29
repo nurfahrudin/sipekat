@@ -24,12 +24,12 @@
 		</div>
 
 		<div class="row">
-			<div class="col-md-6 col-xl-2">
+			<div class="col-md-6 col-xl-4">
 				<div class="card mb-3 widget-content bg-midnight-bloom">
 					<div class="widget-content-wrapper text-white">
 						<div class="widget-content-left">
 							<div class="widget-heading">Jumlah Sertifikat</div>
-							<div class="widget-subheading">Total sertifikat</div>
+							<div class="widget-subheading">Total sertifikat siap ambil</div>
 						</div>
 						<div class="widget-content-right">
 							<div class="widget-numbers text-white">
@@ -39,76 +39,31 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6 col-xl-2">
-				<div class="card mb-3 widget-content bg-mixed-hopes">
+			<div class="col-md-6 col-xl-4">
+				<div class="card mb-3 widget-content bg-grow-early">
+					<div class="widget-content-wrapper text-white">
+						<div class="widget-content-left">
+							<div class="widget-heading">Hak Milik</div>
+							<div class="widget-subheading">Sertifikat Hak Milik</div>
+						</div>
+						<div class="widget-content-right">
+							<div class="widget-numbers text-white">
+								<span>{{ s_hak_milik }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xl-4">
+				<div class="card mb-3 widget-content bg-premium-dark">
 					<div class="widget-content-wrapper text-white">
 						<div class="widget-content-left">
 							<div class="widget-heading">Hak Tanggungan</div>
-							<div class="widget-subheading">Kegiatan Hak Tanggungan</div>
+							<div class="widget-subheading">Sertifikat Hak Tanggungan</div>
 						</div>
 						<div class="widget-content-right">
 							<div class="widget-numbers text-white">
 								<span>{{ s_hak_tanggungan }}</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6 col-xl-2">
-				<div class="card mb-3 widget-content bg-sunny-morning">
-					<div class="widget-content-wrapper text-white">
-						<div class="widget-content-left">
-							<div class="widget-heading">Jual Beli</div>
-							<div class="widget-subheading">Kegiatan Jual Beli</div>
-						</div>
-						<div class="widget-content-right">
-							<div class="widget-numbers text-white">
-								<span>{{ s_jual_beli }}</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6 col-xl-2">
-				<div class="card mb-3 widget-content bg-amy-crisp">
-					<div class="widget-content-wrapper text-white">
-						<div class="widget-content-left">
-							<div class="widget-heading">Pemecahan</div>
-							<div class="widget-subheading">Kegiatan Pemecahan</div>
-						</div>
-						<div class="widget-content-right">
-							<div class="widget-numbers text-white">
-								<span>{{ s_pemecahan }}</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6 col-xl-2">
-				<div class="card mb-3 widget-content bg-arielle-smile">
-					<div class="widget-content-wrapper text-white">
-						<div class="widget-content-left">
-							<div class="widget-heading">Pengecekan</div>
-							<div class="widget-subheading">Kegiatan Pengecekan</div>
-						</div>
-						<div class="widget-content-right">
-							<div class="widget-numbers text-white">
-								<span>{{ s_pengecekan }}</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6 col-xl-2">
-				<div class="card mb-3 widget-content bg-plum-plate">
-					<div class="widget-content-wrapper text-white">
-						<div class="widget-content-left">
-							<div class="widget-heading">Hapusnya Hak</div>
-							<div class="widget-subheading">Kegiatan Roya</div>
-						</div>
-						<div class="widget-content-right">
-							<div class="widget-numbers text-white">
-								<span>{{ s_roya }}</span>
 							</div>
 						</div>
 					</div>
@@ -149,9 +104,10 @@
 										<tr>
 											<th class="text-center">ID</th>
 											<th class="text-center">Nama Pemilik</th>
-											<th class="text-center">Jenis Kegiatan</th>
-											<th class="text-center">Nomor HAK</th>
-											<th class="text-center">Nomor Berkas</th>
+											<th class="text-center">Jenis</th>
+											<th class="text-center">Nomor</th>
+											<th class="text-center">NIB</th>
+											<th class="text-center">Luas (M²)</th>
 											<th class="text-center">Letak Desa</th>
 											<th class="text-center">Keterangan</th>
 										</tr>
@@ -181,11 +137,6 @@
 				</div>
 				<div class="modal-body">
 					<div id="modals-input"></div>
-					<script>
-						function FuncHM() {
-							$("#id_nomor").val($("#id_nomor").val().padStart(5,'0'))
-						}
-					</script>
 				</div>
 				<div class="modal-footer">
 					<div style="float: right;">
@@ -271,7 +222,7 @@
 			"lengthMenu": [[6, 8, 10, -1], [6, 8, 10, "All"]],
 			"columnDefs": [
 								{
-									"targets": [0, 7],
+									"targets": [0, 8],
 									"visible": false,
 									"searchable": false
 								}
@@ -279,34 +230,23 @@
 			"ajax": "{% url 'ajax_table_list_sipekat' %}",
 			"columns": [
 						{ "data": "id" },
-						{ "data": "pemilik", "width": "20%" },
-						{ "data": "jenis", "width": "15%",
+						{ "data": "pemilik", "width": "25%" },
+						{ "data": "jenis", "width": "10%",
 							"render": function (data, type, full) {
 								if (data == "1") {
-									 return 'Hak Tanggungan';
+									 return 'Hak Atas Tanah';
 								} else if (data == "2") {
-									 return 'Jual Beli';
-								} else if (data == "3") {
-									 return 'Pemecahan';
-								} else if (data == "4") {
-									 return 'Pendaftaran SK Hak 1X';
-								} else if (data == "5") {
-									 return 'Pengecekan';
-								} else if (data == "6") {
-									 return 'Pewarisan';
-								} else if (data == "7") {
-									 return 'Roya';
-								} else if (data == "8") {
-									 return 'Wakaf';
+									 return 'Hak Tanggungan';
 								} else {
-									 return 'Lain-lain';
+									 return 'Tanah Wakaf';
 								}
 							}
 						},
 						{ "data": "nomor", "width": "10%", className: 'text-center' },
-						{ "data": "berkas", "width": "12%", className: 'text-center' },
+						{ "data": "nib", "width": "12%", className: 'text-center' },
+						{ "data": "luas", "width": "10%", className: 'text-center' },
 						{ "data": "kelurahan", "width": "15%" },
-						{ "data": "keterangan", "width": "30%" },
+						{ "data": "keterangan", "width": "20%" },
 						{ "data": "post", "width": "30%" },
 			]
 		});
@@ -357,8 +297,13 @@
 						<div class="col-md-4 mb-3">'.concat(data.form[6][0].concat('</div>\
 						</div>\
 						<div class="form-row">\
-						<div class="col-md-12 mb-3">'.concat(data.form[7][0].concat('</div>\
-						</div>'))))))))))))))
+						<div class="col-md-4 mb-3">'.concat(data.form[7][0].concat('</div>\
+						<div class="col-md-4 mb-3">'.concat(data.form[8][0].concat('</div>\
+						<div class="col-md-4 mb-3">'.concat(data.form[9][0].concat('</div>\
+						</div>\
+						<div class="form-row">\
+						<div class="col-md-12 mb-3">'.concat(data.form[10][0].concat('</div>\
+						</div>'))))))))))))))))))))
 						);
 					kecamatan();
 				}

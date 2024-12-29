@@ -1,9 +1,8 @@
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.views.static import serve
-from django.conf.urls import url
 from django.conf import settings
-from django.urls import path
+from django.urls import path, re_path as url
 from . import views
 
 
@@ -22,12 +21,10 @@ urlpatterns = [
     # pengambil
     path('list/pengambil/', views.list_pengambil, name='list_pengambil'),
     path('ajax/table-list-pengambil/', views.table_list_pengambil, name='ajax_table_list_pengambil'),
-    path('ajax/table-list-pengambil1/', views.table_list_pengambil1, name='ajax_table_list_pengambil1'),
     path('cetak/<str:id>/pengambil/', views.cetak_pengambil, name='cetak_pengambil'),
 
     # ambil_sertifikat
     path('list/ambil-sertifikat/', views.list_ambil_sertifikat, name='list_ambil_sertifikat'),
-    path('ajax/table-list-ambil/', views.table_list_ambil, name='ajax_table_list_ambil'),
     path('ambil/<str:id>/sertifikat/', views.ambil_sertifikat, name='ambil_sertifikat'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -57,7 +57,8 @@ def index(request):
 		cp1.execute(qp + ' WHERE p.jenis==1')
 		cp2.execute(qp + ' WHERE p.jenis==2')
 		data = cs.fetchall()+cp.fetchall()+cs1.fetchall()+cs2.fetchall()+cp1.fetchall()+cp2.fetchall()
-		return render(request, 'sipekat/index.html', {'items':items(), 's_total':data[0][0], 'p_total':data[1][0],
+
+		return render(request, 'sipekat/index.html', {'s_total':data[0][0], 'p_total':data[1][0],
 														's_post_0':ZeroDivision(data[2][0],data[0][0]), 's_post_1':ZeroDivision(data[3][0],data[0][0]),
 														'p_jenis_1':ZeroDivision(data[4][0],p_data[0][0]), 'p_jenis_2':ZeroDivision(data[5][0],p_data[1][0])})
 	else:
@@ -74,22 +75,17 @@ def index(request):
 def list_sertifikat(request):
 	if ('user' in request.session) and ('uid' in request.session):
 		query = 'select count(s.id) from sipekat_sertifikat s '
-		cursor, cursor2, cursor3, cursor4, cursor5, cursor6 = connection.cursor(), connection.cursor(), connection.cursor(), \
-																connection.cursor(), connection.cursor(), connection.cursor()
+		cursor, cursor2, cursor3 = connection.cursor(), connection.cursor(), connection.cursor()
 		cursor.execute(query)
 		cursor2.execute(query + 'where s.jenis==1')
 		cursor3.execute(query + 'where s.jenis==2')
-		cursor4.execute(query + 'where s.jenis==3')
-		cursor5.execute(query + 'where s.jenis==5')
-		cursor6.execute(query + 'where s.jenis==7')
-		data = cursor.fetchall()+cursor2.fetchall()+cursor3.fetchall()+cursor4.fetchall()+cursor5.fetchall()+cursor6.fetchall()
-		return render(request, 'sipekat/data_sertifikat.html', {'s_total':data[0][0], 's_hak_tanggungan':data[1][0], 's_jual_beli':data[2][0], \
-								's_pemecahan':data[3][0], 's_pengecekan':data[4][0], 's_roya':data[5][0], 'items':items()})
+		data = cursor.fetchall()+cursor2.fetchall()+cursor3.fetchall()
+		return render(request, 'sipekat/data_sertifikat.html', {'s_total':data[0][0], 's_hak_milik':data[1][0], 's_hak_tanggungan':data[2][0], 'items':items()})
 	else:
 		return redirect('/login')
 
 def table_list_sipekat(request):
-	query = 'select s.id,  s.pemilik, s.jenis, s.nomor, s.berkas, s.keterangan, s.post, k.nama kelurahan from sipekat_sertifikat s join warkah_kelurahan k on s.kelurahan_id==k.id'
+	query = 'select s.id,  s.pemilik, s.jenis, s.nomor, s.nib, s.luas, s.keterangan, s.post, k.nama kelurahan from sipekat_sertifikat s join warkah_kelurahan k on s.kelurahan_id==k.id'
 	cursor = connection.cursor()
 	cursor.execute(query)
 	obj_list = dictfetchall(cursor)
@@ -100,8 +96,9 @@ def input_sertifikat(request):
 	data = {}
 	if request.is_ajax() and request.method == 'POST':
 		post = request.POST
-		new_sertifikat = Sertifikat(pemilik=post['pemilik'], jenis=post['jenis'], nomor=post['nomor'], berkas=post['berkas'], kecamatan_id=post['kecamatan'],
-									kelurahan_id=post['kelurahan'], keterangan=post['keterangan'], user_id=request.session['uid'])
+		new_sertifikat = Sertifikat(pemilik=post['pemilik'], jenis=post['jenis'], nomor=post['nomor'], nib=post['nib'], luas=post['luas'],
+									jns_bidang=post['jns_bidang'], kecamatan_id=post['kecamatan'], kelurahan_id=post['kelurahan'], tahun=post['tahun'],
+									keterangan=post['keterangan'], user_id=request.session['uid'])
 		try:
 			new_sertifikat.save()
 			data['msg'] = 'Success'
@@ -127,9 +124,12 @@ def edit_sertifikat(request, id):
 			edit_sertifikat.pemilik			= post['pemilik']
 			edit_sertifikat.jenis			= post['jenis']
 			edit_sertifikat.nomor			= post['nomor']
-			edit_sertifikat.berkas			= post['berkas']
+			edit_sertifikat.nib				= post['nib']
+			edit_sertifikat.luas			= post['luas']
+			edit_sertifikat.jns_bidang		= post['jns_bidang']
 			edit_sertifikat.kecamatan_id	= post['kecamatan']
 			edit_sertifikat.kelurahan_id	= post['kelurahan']
+			edit_sertifikat.tahun			= post['tahun']
 			edit_sertifikat.keterangan		= post['keterangan']
 			edit_sertifikat.edit_date		= datetime.datetime.now()
 			edit_sertifikat.user_id			= request.session['uid']
@@ -186,20 +186,12 @@ def list_ambil_sertifikat(request):
 	else:
 		return redirect('/login')
 
-def table_list_ambil(request):
-	query = 'select s.id,  s.pemilik, s.jenis, s.nomor, s.berkas, s.keterangan, s.post, k.nama kelurahan from sipekat_sertifikat s join warkah_kelurahan k on s.kelurahan_id==k.id where s.post == 0'
-	cursor = connection.cursor()
-	cursor.execute(query)
-	obj_list = dictfetchall(cursor)
-	result = json.dumps({"data": list(obj_list)})
-	return HttpResponse(result, content_type="application/json")
-
 def ambil_sertifikat(request, id):
 	if ('user' in request.session) and ('uid' in request.session):
 		dt_sertifikat = []
 		sr_id = id.split(",")
 		for i in range(len(sr_id)):
-			qr_sertifikat = 'select s.pemilik, s.nomor, s.berkas, kc.nama kecamatan, kl.nama kelurahan, s.keterangan, case when s.jenis == 1 then "Hak Tanggungan" when s.jenis == 2 then "Jual Beli" when s.jenis == 3 then "Pemecahan" when s.jenis == 4 then "Pendaftaran SK Hak 1X" when s.jenis == 5 then "Pengecekan" when s.jenis == 6 then "Pewarisan" when s.jenis == 7 then "Hapusnya Hak/Roya" when s.jenis == 8 then "Wakaf" else "Lain-lain" end jenis from sipekat_sertifikat s, warkah_kecamatan kc, warkah_kelurahan kl where s.id=='+str(sr_id[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
+			qr_sertifikat = 'select s.pemilik, s.nomor, s.nib, s.luas, s.tahun, kc.nama kecamatan, kl.nama kelurahan, s.keterangan, case when s.jns_bidang == 1 then "Pekarangan" when s.jns_bidang == 2 then "Pertanian" else "Perkebunan" end jns_bidang from sipekat_sertifikat s, warkah_kecamatan kc, warkah_kelurahan kl where s.id=='+str(sr_id[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
 			cursor.execute(qr_sertifikat)
 			rs_sertifikat = dictfetchall(cursor)
 			no = rs_sertifikat[0]
@@ -208,47 +200,30 @@ def ambil_sertifikat(request, id):
 
 		if request.method == 'POST':
 			post = request.POST
-			if request.FILES:
-				new_pengambil = Pengambil(jenis=post['jenis'], nama=post['nama'], nik=post['nik'], alamat=post['alamat'], tlp=post['tlp'], keterangan=post['keterangan'],
-										gambar=request.FILES['gambar'], user_id=request.session['uid'])
-				try:
-					new_pengambil.save()
-					
-					p_edit = get_object_or_404(Pengambil, pk=new_pengambil.id)
-					img_src_path = os.path.join(settings.BASE_DIR, 'media/'+str(p_edit.gambar))
-					file_name = str(p_edit.gambar).split('/',1)[1]
-					from PIL import Image
-					im = Image.open(img_src_path)
-					im_resized = im.resize((im.width // 2, im.height // 2))
-					im_resized.save(str(settings.BASE_DIR)+file_name)
+			new_pengambil = Pengambil(jenis=post['jenis'], nama=post['nama'], nik=post['nik'], alamat=post['alamat'], tlp=post['tlp'], keterangan=post['keterangan'],
+									gambar=request.FILES['gambar'], user_id=request.session['uid'])
+			try:
+				new_pengambil.save()
+				
+				p_edit = get_object_or_404(Pengambil, pk=new_pengambil.id)
+				img_src_path = os.path.join(settings.BASE_DIR, 'media/'+str(p_edit.gambar))
+				file_name = str(p_edit.gambar).split('/',1)[1]
+				from PIL import Image
+				im = Image.open(img_src_path)
+				im_resized = im.resize((im.width // 2, im.height // 2))
+				im_resized.save(str(settings.BASE_DIR)+file_name)
 
-					for i in range(len(sr_id)):
-						post_sertifikat = get_object_or_404(Sertifikat, pk=sr_id[i])
-						post_sertifikat.post = 1
-						post_sertifikat.pengambil_id = new_pengambil.id
-						post_sertifikat.post_date = datetime.datetime.now()
-						post_sertifikat.save()
-					messages.success(request, 'Pengambilan Sertifikat Sukses.')
-					return redirect('/sipekat/list/pengambil')
-				except:
-					messages.error(request, 'Pengambilan Sertifikat Gagal.')
-					return redirect('/sipekat/list/ambil-sertifikat')
-			else:
-				new_pengambil = Pengambil(jenis=post['jenis'], nama=post['nama'], nik=post['nik'], alamat=post['alamat'], tlp=post['tlp'], keterangan=post['keterangan'],
-										user_id=request.session['uid'])
-				try:
-					new_pengambil.save()
-					for i in range(len(sr_id)):
-						post_sertifikat = get_object_or_404(Sertifikat, pk=sr_id[i])
-						post_sertifikat.post = 1
-						post_sertifikat.pengambil_id = new_pengambil.id
-						post_sertifikat.post_date = datetime.datetime.now()
-						post_sertifikat.save()
-					messages.success(request, 'Pengambilan Sertifikat Sukses.')
-					return redirect('/sipekat/list/pengambil')
-				except:
-					messages.error(request, 'Pengambilan Sertifikat Gagal.')
-					return redirect('/sipekat/list/ambil-sertifikat')
+				for i in range(len(sr_id)):
+					post_sertifikat = get_object_or_404(Sertifikat, pk=sr_id[i])
+					post_sertifikat.post = 1
+					post_sertifikat.pengambil_id = new_pengambil.id
+					post_sertifikat.post_date = datetime.datetime.now()
+					post_sertifikat.save()
+				messages.success(request, 'Pengambilan Sertifikat Sukses.')
+				return redirect('/sipekat/list/pengambil')
+			except:
+				messages.error(request, 'Pengambilan Sertifikat Gagal.')
+				return redirect('/sipekat/list/ambil-sertifikat')
 		return render(request, 'sipekat/form_ambil_sertifikat.html', {'data':dt_sertifikat})
 	else:
 		return redirect('/login')
@@ -274,15 +249,7 @@ def list_pengambil(request):
 		return redirect('/login')
 
 def table_list_pengambil(request):
-	query = 'select p.id, p.nama, p.nik, p.alamat, p.tlp, strftime("%d-%m-%Y %H:%M:%S", p.tgl) tgl, strftime("%Y%m%d%H:%M:%S", p.tgl) short, p.gambar from sipekat_pengambil p'
-	cursor = connection.cursor()
-	cursor.execute(query)
-	obj_list = dictfetchall(cursor)
-	result = json.dumps({"data": list(obj_list)}, cls=DjangoJSONEncoder)
-	return HttpResponse(result, content_type="application/json")
-	
-def table_list_pengambil1(request):
-	query = 'select s.pemilik, p.tlp, p.nama, case when s.jenis == 1 then "Hak Tanggungan" when s.jenis == 2 then "Jual Beli" when s.jenis == 3 then "Pemecahan" when s.jenis == 4 then "Pendaftaran SK Hak 1X" when s.jenis == 5 then "Pengecekan" when s.jenis == 6 then "Pewarisan" when s.jenis == 7 then "Hapusnya Hak/Roya" when s.jenis == 8 then "Wakaf" else "Lain-lain" end kegiatan, k.nama kelurahan,  strftime("%d-%m-%Y %H:%M:%S", p.tgl) tgl, s.post from sipekat_sertifikat s join sipekat_pengambil p on s.pengambil_id == p.id join warkah_kelurahan k on k.id  == s.kelurahan_id'
+	query = 'select p.id, p.nama, p.nik, p.alamat, p.tlp, strftime("%d-%m-%Y %H:%M:%S", p.tgl) tgl from sipekat_pengambil p order by p.tgl'
 	cursor = connection.cursor()
 	cursor.execute(query)
 	obj_list = dictfetchall(cursor)
@@ -314,9 +281,12 @@ def cetak_pengambil(request, id):
 		data_pengambil['gambar']	= '/sipekat/media/'+obj_pengambil[0]['gambar']
 
 		for i in range(len(idnya)):
-			qr_sertifikat = 'select p.nama p_nama, p.tgl, s.pemilik, s.nomor, s.berkas, kc.nama kecamatan, kl.nama kelurahan, case when s.jenis == 1 then "Hak Tanggungan" when s.jenis == 2 then "Jual Beli" when s.jenis == 3 then "Pemecahan" when s.jenis == 4 then "Pendaftaran SK Hak 1X" when s.jenis == 5 then "Pengecekan" when s.jenis == 6 then "Pewarisan" when s.jenis == 7 then "Hapusnya Hak/Roya" when s.jenis == 8 then "Wakaf" else "Lain-lain" end kegiatan from sipekat_pengambil p, sipekat_sertifikat s, warkah_kecamatan kc, warkah_kelurahan kl where s.pengambil_id == p.id and p.id=='+str(idnya[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
+			qr_sertifikat = 'select p.nama p_nama, p.tgl, s.pemilik, s.nomor, s.nib, s.luas, s.tahun, kc.nama kecamatan, kl.nama kelurahan, s.keterangan, case when s.jns_bidang == 1 then "Pekarangan" when s.jns_bidang == 2 then "Pertanian" else "Perkebunan" end jns_bidang from sipekat_pengambil p, sipekat_sertifikat s, warkah_kecamatan kc, warkah_kelurahan kl where s.pengambil_id == p.id and p.id=='+str(idnya[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
 			cursor.execute(qr_sertifikat)
 			obj_sertifikat = dictfetchall(cursor)
+
+			print ('++++++++++++++++++++++++++++++++')
+			print (len(obj_sertifikat))
 
 			for a in range(len(obj_sertifikat)):
 				no = obj_sertifikat[a]

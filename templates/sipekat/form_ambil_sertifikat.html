@@ -39,10 +39,13 @@
                                             <th>No.</th>
                                             <th>Nama Pemilik</th>
                                             <th>Nomor Hak</th>
-                                            <th>Nomor Berkas</th>
+                                            <th>Nomor Induk Bidang</th>
+                                            <th>Luas (M²)</th>
+                                            <th>Tahun</th>
                                             <th>Kecamatan</th>
                                             <th>Desa/Kelurahan</th>
                                             <th>Jenis Kegiatan</th>
+                                            <th>Keadaan Tanah</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -51,10 +54,13 @@
                                             <td>{{ val.no }}.</td>
                                             <td>{{ val.pemilik }}</td>
                                             <td>{{ val.nomor }}</td>
-                                            <td>{{ val.berkas }}</td>
+                                            <td>{{ val.nib }}</td>
+                                            <td>{{ val.luas }}</td>
+                                            <td>{{ val.tahun }}</td>
                                             <td>{{ val.kecamatan }}</td>
                                             <td>{{ val.kelurahan }}</td>
-                                            <td>{{ val.jenis }}</td>
+                                            <td>{{ val.keterangan }}</td>
+                                            <td>{{ val.jns_bidang }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -94,7 +100,7 @@
                                             <textarea name="keterangan" class="form-control" id="keterangan" type="text" placeholder="Keterangan Pengambilan"></textarea>
                                         </div>
                                         <div class="position-relative form-group col-md-2 mb-3"><label for="exampleFile">Upload Foto</label>
-                                            <input name="gambar" class="form-control-file" id="gambar" type="file" onchange="return fileValidation()"/>
+                                            <input name="gambar" class="form-control-file" id="gambar" type="file" oninvalid="this.setCustomValidity('Foto harus ada, tidak boleh kosong.')" required="" oninput="setCustomValidity('')" onchange="return fileValidation()"/>
                                         </div>
                                         <div class="position-relative form-group col-md-2 mb-3"><label for="exampleFile"></label></br>
                                             <div id="previewGambar"></div>

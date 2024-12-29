@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 
 
 <!doctype html>
@@ -75,10 +75,13 @@
 						<th style="text-align:center">No.</th>
 						<th style="text-align:center">Nama Pemilik</th>
 						<th style="text-align:center">Nomor Hak</th>
-						<th style="text-align:center">Nomor Berkas</th>
+						<th style="text-align:center">Nomor Induk Bidang</th>
+						<th style="text-align:center">Luas (M²)</th>
+						<th style="text-align:center">Tahun</th>
 						<th style="text-align:center">Kecamatan</th>
 						<th style="text-align:center">Desa/Kelurahan</th>
 						<th style="text-align:center">Jenis Kegiatan</th>
+						<th style="text-align:center">Keadaan Tanah</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -87,10 +90,13 @@
 						<td style="text-align:center"> {{ val.no }} </td>
 						<td> {{ val.pemilik }} </td>
 						<td style="text-align:center"> {{ val.nomor }} </td>
-						<td style="text-align:center"> {{ val.berkas }} </td>
+						<td style="text-align:center"> {{ val.nib }} </td>
+						<td style="text-align:center"> {{ val.luas }} </td>
+						<td style="text-align:center"> {{ val.tahun }} </td>
 						<td style="text-align:center"> {{ val.kecamatan }} </td>
 						<td style="text-align:center"> {{ val.kelurahan }} </td>
-						<td style="text-align:center"> {{ val.kegiatan }} </td>
+						<td style="text-align:center"> {{ val.keterangan }} </td>
+						<td style="text-align:center"> {{ val.jns_bidang }} </td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -112,7 +118,7 @@
 					<td style="text-align:center"><hr style="border-style: solid none; border-width: 1px 0; margin: 18px 0;" width="100%"></td>
 				</tr>
 				<tr>
-					<td style="text-align:center">{{ request.session.nama }}</td>
+					<td style="text-align:center">{{ request.session.user }}</td>
 					<td width="67%"></td>
 					<td style="text-align:center">{{ pengambil.nama }}</td>
 				</tr>
@@ -131,7 +137,7 @@
 			$(document).ready(function() {
 				$('#cetak').on('click', function() {
 					var prtContent = document.getElementById("print_area");
-					var WinPrint = window.open('', '', 'left=0, top=0, width=900, height=1000, toolbar=0, scrollbars=0, status=0');
+					var WinPrint = window.open('', '', 'left=0,top=0,width=900,height=1000,toolbar=0,scrollbars=0,status=0');
 					WinPrint.document.write(prtContent.innerHTML);
 					WinPrint.document.close();
 					WinPrint.focus();

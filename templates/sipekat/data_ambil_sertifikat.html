@@ -112,8 +112,8 @@
 													<th></th>
 													<th class="text-center">Nama Pemilik</th>
 													<th class="text-center">Jenis</th>
-													<th class="text-center">Nomor HAK</th>
-													<th class="text-center">Nomor Berkas</th>
+													<th class="text-center">Nomor</th>
+													<th class="text-center">Luas (M²)</th>
 													<th class="text-center">Letak Desa</th>
 													<th class="text-center">Keterangan</th>
 													<th class="text-center">Status</th>
@@ -251,37 +251,25 @@
 								'checkboxes': { 'selectRow': true }
 							}],
 			'order': [[1, 'asc']],
-			"ajax": "{% url 'ajax_table_list_ambil' %}",
+			"ajax": "{% url 'ajax_table_list_sipekat' %}",
 			"columns": [
 						{ "data": "id" },
 						{ "data": "pemilik", "width": "20%" },
-						{ "data": "jenis", "width": "15%",
+						{ "data": "jenis", "width": "10%",
 							"render": function (data, type, full) {
 								if (data == "1") {
-									 return 'Hak Tanggungan';
+									return 'Hak Atas Tanah';
 								} else if (data == "2") {
-									 return 'Jual Beli';
-								} else if (data == "3") {
-									 return 'Pemecahan';
-								} else if (data == "4") {
-									 return 'Pendaftaran SK Hak 1X';
-								} else if (data == "5") {
-									 return 'Pengecekan';
-								} else if (data == "6") {
-									 return 'Pewarisan';
-								} else if (data == "7") {
-									 return 'Roya';
-								} else if (data == "8") {
-									 return 'Wakaf';
+									return 'Hak Tanggungan';
 								} else {
-									 return 'Lain-lain';
+									return 'Tanah Wakaf';
 								}
 							}
 						},
 						{ "data": "nomor", "width": "8%", className: 'text-center' },
-						{ "data": "berkas", "width": "8%", className: 'text-center' },
+						{ "data": "luas", "width": "8%", className: 'text-center' },
 						{ "data": "kelurahan", "width": "10%" },
-						{ "data": "keterangan", "width": "25%" },
+						{ "data": "keterangan", "width": "30%" },
 						{ "data": "post", "width": "5%", className: 'text-center',
 							"render": function (data, type, full) {
 								if (data == "0") {

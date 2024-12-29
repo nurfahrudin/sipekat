@@ -24,16 +24,18 @@ class Pengambil(models.Model):
 
 
 
-JENIS_KEGIATAN = (('','---------'), (1, 'Hak Tanggungan'), (2, 'Jual Beli'), (3, 'Pemecahan'), (4, 'Pendaftaran SK Hak 1X'),
-									(5, 'Pengecekan'), (6, 'Pewarisan'), (7, 'Roya'), (8, 'Wakaf'), (9, 'Lain-Lain'))
+JENIS_SERTIFIKAT = (('','---------'), (1, 'Hak Atas Tanah'), (2, 'Hak Tanggungan'), (3, 'Tanah Wakaf'))
 JENIS_BIDANG = (('','---------'), (1, 'Pekarangan'), (2, 'Pertanian'), (3, 'Perkebunan'))
 class Sertifikat(models.Model):
 	pemilik = models.CharField(max_length=100)
-	jenis = models.PositiveSmallIntegerField(choices=JENIS_KEGIATAN, blank=False)
+	jenis = models.PositiveSmallIntegerField(choices=JENIS_SERTIFIKAT, blank=False)
 	nomor = models.CharField(max_length=5)
-	berkas = models.CharField(max_length=5)
+	nib = models.CharField(max_length=5)
+	luas = models.IntegerField(null=False)
+	jns_bidang = models.PositiveSmallIntegerField(choices=JENIS_BIDANG, null=False)
 	kecamatan = models.ForeignKey(Kecamatan, on_delete=models.CASCADE)
 	kelurahan = models.ForeignKey(Kelurahan, on_delete=models.CASCADE)
+	tahun = models.IntegerField(null=False)
 	keterangan = models.CharField(max_length=280)
 	post = models.PositiveSmallIntegerField(default=0)
 	post_date = models.DateTimeField(null=True)
