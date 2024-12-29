@@ -1,4 +1,4 @@
-# SIpekat
+# SIPekat
 *******************************************
 Sistem Informasi Pengambilan Sertifikat
 *******************************************
@@ -23,5 +23,5 @@ Modul terpisah dari aplikasi inovasi dari BPN Ngada.
 *******************************************
 -  Install Python
 -  Install Framework Django
--  Create Django project
+-  Git clone 'Main Aplikasi'
 -  Git clone 'sipekat' di dalam folder project
