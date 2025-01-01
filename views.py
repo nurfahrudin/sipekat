@@ -10,8 +10,8 @@ from django.template.loader import render_to_string
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, HttpResponseServerError, JsonResponse
 
-from warkah.views import items
-from warkah.models import Kecamatan, Kelurahan, dictfetchall
+from siwarkah.views import items
+from siwarkah.models import Kecamatan, Kelurahan, dictfetchall
 from .models import Sertifikat, Pengambil
 from .forms import SertifikatForm, PengambilForm
 
@@ -85,7 +85,7 @@ def list_sertifikat(request):
 		return redirect('/login')
 
 def table_list_sipekat(request):
-	query = 'select s.id,  s.pemilik, s.jenis, s.nomor, s.nib, s.luas, s.keterangan, s.post, k.nama kelurahan from sipekat_sertifikat s join warkah_kelurahan k on s.kelurahan_id==k.id'
+	query = 'select s.id,  s.pemilik, s.jenis, s.nomor, s.nib, s.luas, s.keterangan, s.post, k.nama kelurahan from sipekat_sertifikat s join siwarkah_kelurahan k on s.kelurahan_id==k.id'
 	cursor = connection.cursor()
 	cursor.execute(query)
 	obj_list = dictfetchall(cursor)
@@ -191,7 +191,7 @@ def ambil_sertifikat(request, id):
 		dt_sertifikat = []
 		sr_id = id.split(",")
 		for i in range(len(sr_id)):
-			qr_sertifikat = 'select s.pemilik, s.nomor, s.nib, s.luas, s.tahun, kc.nama kecamatan, kl.nama kelurahan, s.keterangan, case when s.jns_bidang == 1 then "Pekarangan" when s.jns_bidang == 2 then "Pertanian" else "Perkebunan" end jns_bidang from sipekat_sertifikat s, warkah_kecamatan kc, warkah_kelurahan kl where s.id=='+str(sr_id[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
+			qr_sertifikat = 'select s.pemilik, s.nomor, s.nib, s.luas, s.tahun, kc.nama kecamatan, kl.nama kelurahan, s.keterangan, case when s.jns_bidang == 1 then "Pekarangan" when s.jns_bidang == 2 then "Pertanian" else "Perkebunan" end jns_bidang from sipekat_sertifikat s, siwarkah_kecamatan kc, siwarkah_kelurahan kl where s.id=='+str(sr_id[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
 			cursor.execute(qr_sertifikat)
 			rs_sertifikat = dictfetchall(cursor)
 			no = rs_sertifikat[0]
@@ -281,7 +281,7 @@ def cetak_pengambil(request, id):
 		data_pengambil['gambar']	= '/sipekat/media/'+obj_pengambil[0]['gambar']
 
 		for i in range(len(idnya)):
-			qr_sertifikat = 'select p.nama p_nama, p.tgl, s.pemilik, s.nomor, s.nib, s.luas, s.tahun, kc.nama kecamatan, kl.nama kelurahan, s.keterangan, case when s.jns_bidang == 1 then "Pekarangan" when s.jns_bidang == 2 then "Pertanian" else "Perkebunan" end jns_bidang from sipekat_pengambil p, sipekat_sertifikat s, warkah_kecamatan kc, warkah_kelurahan kl where s.pengambil_id == p.id and p.id=='+str(idnya[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
+			qr_sertifikat = 'select p.nama p_nama, p.tgl, s.pemilik, s.nomor, s.nib, s.luas, s.tahun, kc.nama kecamatan, kl.nama kelurahan, s.keterangan, case when s.jns_bidang == 1 then "Pekarangan" when s.jns_bidang == 2 then "Pertanian" else "Perkebunan" end jns_bidang from sipekat_pengambil p, sipekat_sertifikat s, siwarkah_kecamatan kc, siwarkah_kelurahan kl where s.pengambil_id == p.id and p.id=='+str(idnya[i])+' and s.kelurahan_id == kl.id and kc.id == kl.kecamatan_id'
 			cursor.execute(qr_sertifikat)
 			obj_sertifikat = dictfetchall(cursor)
 

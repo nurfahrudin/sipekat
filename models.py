@@ -1,8 +1,7 @@
 import datetime
 from django.db import models
 
-from warkah.models import User, Kecamatan, Kelurahan
-
+from siwarkah.models import User, Kecamatan, Kelurahan
 
 
 JENIS_PENGAMBIL = (('','---------'), (1, 'Atas Nama Sendiri'), (2, 'Melalui Kuasa'))
